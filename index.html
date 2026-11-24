@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Sara's Lebanese Sweets</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Nunito+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+/* VOICE: warm, generous, homemade; a family kitchen taking orders.
+   IDEA: a dessert tray from a Beirut sweet shop, with the order slip beside it.
+   PICTURE: an SVG tray of baklava diamonds, maamoul and knafeh under an arch.
+   COLOUR and TYPE: pomegranate red ground, pistachio and orange blossom gold; Amiri + Nunito Sans.
+   LAYOUT: hero scene, menu of five plus custom box, one calm order column, footer. */
+:root{color-scheme:light dark;
+--bg:light-dark(#fffaf6,#1c0f14);--ink:light-dark(#2b1419,#f7e9e4);--soft:light-dark(#6d4a50,#cdb1b4);
+--card:light-dark(#ffffff,#2a171e);--line:light-dark(#ecd9d3,#47292f);
+--rose:#a3355a;--rose2:#7a2142;--pist:#7f9f3c;--gold:#e2a52b;--field:light-dark(#fff,#24131a)}
+:root[data-theme=light]{color-scheme:light}:root[data-theme=dark]{color-scheme:dark}
+*{box-sizing:border-box;min-width:0}
+[hidden]{display:none!important}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.55 "Nunito Sans",system-ui,sans-serif;overflow-x:clip}
+h1,h2,h3{font-family:Amiri,Georgia,serif;line-height:1.05;text-wrap:balance;margin:0}
+.band{padding:clamp(28px,4vw,64px) max(5vw,16px)}
+.wrap{max-width:1240px;margin:0 auto}
+a{color:inherit}
+html{scroll-padding-top:72px;scroll-behavior:smooth}
+nav{background:var(--rose2);color:#fbe9e2;display:flex;flex-wrap:wrap;gap:8px 20px;align-items:center;justify-content:space-between;padding:12px max(5vw,16px)}
+nav b{font-family:Amiri,serif;font-size:22px;font-weight:700}
+nav .links{display:flex;gap:18px;flex-wrap:wrap}
+nav .links a{text-decoration:none;font-weight:600;padding:8px 0}
+nav .links a:hover{text-decoration:underline}
+.hero{background:var(--rose);color:#fff3ee;position:relative;overflow:hidden;padding-bottom:calc(clamp(28px,4vw,64px) + 22px)}
+.hero::after{content:"";position:absolute;left:0;right:0;bottom:-1px;height:24px;background:radial-gradient(circle at 18px 24px,var(--bg) 17px,transparent 18px) 0 0/36px 24px repeat-x}
+.hero .wrap{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.1fr);gap:32px;align-items:center}
+.hero h1{font-size:clamp(38px,5.4vw,60px);font-weight:700}
+.hero p{font-size:17px;max-width:46ch;color:#f6d9d2}
+.btn{display:inline-flex;align-items:center;justify-content:center;min-height:48px;padding:0 26px;border-radius:999px;border:0;background:var(--gold);color:#3a1a05;font:700 16px "Nunito Sans",sans-serif;text-decoration:none;cursor:pointer}
+.btn:hover{filter:brightness(1.06)}
+.btn:focus-visible,input:focus-visible,textarea:focus-visible,.pick input:focus-visible+span{outline:3px solid var(--gold);outline-offset:2px}
+.hero svg{width:100%;height:auto;display:block}
+.note{font-size:14px;color:var(--soft)}
+.facts{list-style:none;padding:0;margin:18px 0 0;display:flex;flex-wrap:wrap;gap:8px}
+.facts li{background:#ffffff26;border:1px solid #ffffff40;border-radius:999px;padding:6px 14px;font-size:14px;font-weight:600;color:#fff3ee}
+.menu h2,.order h2{font-size:clamp(32px,4vw,44px);color:var(--rose)}
+:root[data-theme=dark] .menu h2,:root[data-theme=dark] .order h2{color:#f2b8c4}
+@media (prefers-color-scheme:dark){:root:not([data-theme=light]) .menu h2,:root:not([data-theme=light]) .order h2{color:#f2b8c4}}
+.grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px;margin-top:24px}
+.dish{position:relative;background:var(--card);border:2px solid var(--line);border-radius:22px;padding:18px;display:flex;flex-direction:column;gap:8px;cursor:pointer;text-align:left;font:inherit;color:inherit;transition:transform .15s,border-color .15s,box-shadow .15s}
+.dish:hover{transform:translateY(-3px);box-shadow:0 10px 24px #a3355a22}
+.dish:focus-visible{outline:3px solid var(--gold);outline-offset:3px}
+.dish .add{margin-top:auto;align-self:flex-start;border-radius:999px;padding:8px 16px;font-weight:700;font-size:15px;background:light-dark(#fbe7ec,#3a1f28);color:var(--rose)}
+:root[data-theme=dark] .dish .add{color:#f2b8c4}
+.dish[aria-pressed=true]{border-color:var(--pist);box-shadow:0 0 0 3px #7f9f3c33}
+.dish[aria-pressed=true] .add{background:var(--pist);color:#fff}
+.dish.custom .add{background:#ffffff22;color:#fff}
+.dish svg{width:100%;height:140px;border-radius:12px}
+.dish h3{font-size:26px}
+.dish .ar{font-family:Amiri,serif;color:var(--pist);font-size:18px}
+.dish p{margin:0 0 6px;font-size:15px;color:var(--soft)}
+.dish.custom{background:var(--rose2);color:#fbe9e2;border-color:var(--rose2)}
+.dish.custom[aria-pressed=true]{border-color:var(--gold)}
+.dish.custom p{color:#f0cfc8}
+.order{background:light-dark(#f7ece6,#170b10)}
+.order .wrap{max-width:720px}
+form{display:grid;gap:22px;margin-top:22px}
+fieldset{border:1px solid var(--line);border-radius:18px;padding:18px 18px 20px;margin:0;background:var(--card);display:grid;gap:14px}
+legend{font-family:Amiri,serif;font-size:24px;font-weight:700;padding:0 8px}
+label{display:grid;gap:6px;font-weight:600}
+.row{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,200px),1fr));gap:14px}
+input,textarea{font:16px "Nunito Sans",sans-serif;min-height:48px;padding:10px 14px;border-radius:12px;border:1.5px solid var(--line);background:var(--field);color:var(--ink);width:100%}
+textarea{min-height:96px;resize:vertical}
+.hint{font-weight:400;font-size:14px;color:var(--soft)}
+.picks{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,190px),1fr));gap:10px}
+.pick{position:relative;display:block}
+.pick input{position:absolute;opacity:0;width:1px;height:1px}
+.pick span{display:flex;align-items:center;gap:10px;min-height:52px;padding:10px 14px;border-radius:14px;border:1.5px solid var(--line);background:var(--field);cursor:pointer;font-weight:600}
+.pick span::before{content:"";flex:none;width:20px;height:20px;border-radius:6px;border:2px solid var(--soft)}
+.pick input:checked+span{border-color:var(--pist);background:light-dark(#f2f7e6,#26301a)}
+.pick input:checked+span::before{background:var(--pist) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'%3E%3Cpath d='M5 10l3.5 3.5L15 7' stroke='white' stroke-width='2.6' fill='none'/%3E%3C/svg%3E") center/16px no-repeat;border-color:var(--pist)}
+#customWrap[hidden]{display:none}
+.err{color:light-dark(#b3122e,#ff8fa3);font-size:14px;font-weight:600;min-height:0}
+.err:empty{display:none}
+.done{background:var(--card);border:2px solid var(--pist);border-radius:18px;padding:22px}
+.done h3{font-size:30px;color:var(--pist);margin-bottom:8px}
+.done dl{display:grid;grid-template-columns:max-content minmax(0,1fr);gap:6px 16px;margin:12px 0 0}
+.done dt{font-weight:700}.done dd{margin:0}
+.tray{position:fixed;left:50%;bottom:16px;transform:translateX(-50%);z-index:5;display:flex;gap:16px;align-items:center;background:var(--rose2);color:#fff3ee;text-decoration:none;border-radius:999px;padding:10px 10px 10px 20px;box-shadow:0 10px 30px #0004;font-weight:600;white-space:nowrap;max-width:calc(100vw - 24px)}
+.tray b{background:var(--gold);color:#3a1a05;border-radius:999px;padding:10px 18px}
+footer{background:var(--rose2);padding-bottom:96px;color:#f0cfc8;font-size:15px}
+footer .wrap{display:flex;flex-wrap:wrap;gap:12px 32px;justify-content:space-between}
+@media(max-width:860px){.grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:600px){.grid{grid-template-columns:minmax(0,1fr)}.hero .wrap{grid-template-columns:minmax(0,1fr)}.hero svg{max-width:440px;margin:0 auto}}
+@media(prefers-reduced-motion:no-preference){.steam{animation:rise 4s ease-in-out infinite}.steam:nth-child(2){animation-delay:1.3s}.steam:nth-child(3){animation-delay:2.6s}}
+@keyframes rise{0%{opacity:0;transform:translateY(8px)}40%{opacity:.7}100%{opacity:0;transform:translateY(-18px)}}
+</style>
+</head>
+<body>
+
+<nav aria-label="Main">
+  <b>Sara's Lebanese Sweets</b>
+  <div class="links"><a href="#menu">Menu</a><a href="#order">Place an order</a></div>
+</nav>
+
+<header class="hero band">
+  <div class="wrap">
+    <div>
+      <h1>Homemade Lebanese desserts, made to order</h1>
+      <p>Trays of baklava, knafeh, maamoul and more, baked fresh by Sara in small batches for your gatherings, holidays and celebrations. Pick your favorites, tell her when, and she will take it from there.</p>
+      <p><a class="btn" href="#order">Start your order</a></p>
+      <ul class="facts"><li>Pickup in Corona, CA</li><li>Order about 5 days ahead</li><li>Serves 4 or more</li></ul>
+    </div>
+    <svg viewBox="0 0 520 380" role="img" aria-label="A round tray of Lebanese sweets under an arched window">
+      <defs>
+        <pattern id="tile" width="40" height="40" patternUnits="userSpaceOnUse">
+          <path d="M20 2 L38 20 L20 38 L2 20Z" fill="none" stroke="#c2577a" stroke-width="1.5"/>
+          <circle cx="20" cy="20" r="3" fill="#c2577a"/>
+        </pattern>
+        <radialGradient id="trayG" cx="50%" cy="40%" r="60%"><stop offset="0" stop-color="#f7d27a"/><stop offset="1" stop-color="#b9801c"/></radialGradient>
+        <linearGradient id="bak" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#f0b850"/><stop offset="1" stop-color="#b8711c"/></linearGradient>
+        <linearGradient id="kn" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#f08a2a"/><stop offset="1" stop-color="#c5561a"/></linearGradient>
+        <g id="diamond"><path d="M0 -16 L14 0 L0 16 L-14 0Z" fill="url(#bak)" stroke="#8a4f12" stroke-width="1"/><circle r="3.2" fill="#8fb34a"/></g>
+        <g id="maamoul"><ellipse cy="5" rx="17" ry="6" fill="#00000030"/><circle r="15" fill="#f6dfb0" stroke="#d9b77a" stroke-width="2"/><path d="M-9 -4 Q0 -12 9 -4 M-11 3 Q0 -5 11 3 M-8 9 Q0 3 8 9" stroke="#d2ad6c" stroke-width="2" fill="none"/></g>
+      </defs>
+      <path d="M60 380 V170 A200 160 0 0 1 460 170 V380Z" fill="#7a2142"/>
+      <path d="M80 380 V176 A180 144 0 0 1 440 176 V380Z" fill="url(#tile)"/>
+      <g class="steamset" stroke="#ffe7df" stroke-width="4" fill="none" stroke-linecap="round" opacity=".8">
+        <path class="steam" d="M210 150 q-10 -14 0 -28 q10 -14 0 -28"/>
+        <path class="steam" d="M260 140 q-10 -14 0 -28 q10 -14 0 -28"/>
+        <path class="steam" d="M310 150 q-10 -14 0 -28 q10 -14 0 -28"/>
+      </g>
+      <ellipse cx="260" cy="306" rx="214" ry="62" fill="#00000040"/>
+      <ellipse cx="260" cy="290" rx="210" ry="64" fill="url(#trayG)" stroke="#8c5d10" stroke-width="3"/>
+      <ellipse cx="260" cy="286" rx="186" ry="52" fill="#e8b956" stroke="#c99232" stroke-width="2"/>
+      <path d="M140 262 Q200 236 262 260 L262 312 Q200 330 140 312Z" fill="url(#kn)"/>
+      <path d="M150 268 Q200 248 252 266" fill="none" stroke="#7fa33a" stroke-width="5" stroke-dasharray="3 7" stroke-linecap="round"/>
+      <g>
+        <use href="#diamond" x="300" y="262"/><use href="#diamond" x="328" y="262"/><use href="#diamond" x="356" y="268"/>
+        <use href="#diamond" x="314" y="290"/><use href="#diamond" x="342" y="292"/><use href="#diamond" x="370" y="296"/>
+        <use href="#diamond" x="300" y="316"/><use href="#diamond" x="330" y="318"/>
+      </g>
+      <use href="#maamoul" x="190" y="234"/><use href="#maamoul" x="226" y="226"/><use href="#maamoul" x="400" y="276"/>
+      <ellipse cx="208" cy="318" rx="34" ry="10" fill="#fff6ec" stroke="#e7d2bb" stroke-width="2"/>
+      <circle cx="200" cy="316" r="3" fill="#c42a4a"/><circle cx="214" cy="319" r="3" fill="#7fa33a"/>
+    </svg>
+  </div>
+</header>
+
+<section id="menu" class="menu band">
+  <div class="wrap">
+    <h2>The menu</h2>
+    <p class="note">Tap any dessert to add it to your order. Sara will confirm pricing with you after you send it.</p>
+    <div class="grid" id="menuGrid"></div>
+  </div>
+</section>
+
+<section id="order" class="order band">
+  <div class="wrap">
+    <h2>Place an order</h2>
+    <p class="note">Three quick steps. Sara will reach out to confirm the details, pricing and a pickup time in Corona.</p>
+    <div id="result"></div>
+    <form id="orderForm" novalidate>
+      <fieldset>
+        <legend>1. About you</legend>
+        <label>Full name<input id="name" name="name" autocomplete="name" required></label>
+        <div class="row">
+          <label>Phone<input id="phone" name="phone" type="tel" autocomplete="tel" inputmode="tel" required placeholder="(555) 555-5555"></label>
+          <label>Email<input id="email" name="email" type="email" autocomplete="email" required placeholder="you@example.com"></label>
+        </div>
+      </fieldset>
+
+      <fieldset>
+        <legend>2. Your desserts</legend>
+        <span class="hint">Pick one or more. Tapping a dessert in the menu above checks it here too.</span>
+        <div class="picks" id="picks"></div>
+        <div id="customWrap" hidden>
+          <label>Describe your custom box<textarea id="custom" name="custom_box" placeholder="For example: a mix of baklava and maamoul, extra pistachio, nut free pieces"></textarea></label>
+        </div>
+        <div class="err" id="pickErr"></div>
+      </fieldset>
+
+      <fieldset>
+        <legend>3. Pickup date and guests</legend>
+        <div class="row">
+          <label>Pickup date<input id="date" name="needed_by" type="date" required></label>
+          <label>Number of guests<input id="guests" name="guests" type="number" min="4" step="1" inputmode="numeric" required placeholder="At least 4"></label>
+        </div>
+        <span class="hint">Orders serve at least 4 people. Please allow about 5 days; need it sooner? Pick the earliest date and mention it in the note, and Sara will let you know.</span>
+        <label>Anything else? <span class="hint">Optional: allergies, the occasion, preferred pickup time</span><textarea id="notes" name="notes"></textarea></label>
+      </fieldset>
+
+      <div class="err" id="formErr" role="alert"></div>
+      <button class="btn" type="submit" id="submitBtn">Send my order</button>
+    </form>
+  </div>
+</section>
+
+<a id="tray" class="tray" href="#order" hidden><span id="trayCount"></span><b>Finish my order</b></a>
+
+<footer class="band">
+  <div class="wrap">
+    <div><b style="font-family:Amiri,serif;font-size:22px">Sara's Lebanese Sweets</b><br>Made fresh at home in small batches.</div>
+    <div>Pickup only, in Corona, California.<br>Sara will confirm your pickup time after you order.</div>
+  </div>
+</footer>
+
+<script>
+{
+/* ======== SETTINGS: replace these with her real info before going live ======== */
+const CONFIG = {
+  ORDER_EMAIL: "adamkodor@yahoo.com",   // orders arrive here (swap for FormSubmit's private alias after activation)
+  SMS_EMAIL: "9518185528@vtext.com",     // Verizon email to text address; leave "" for no text
+  LEAD_DAYS: 5,                          // minimum days of notice; change for busy or slow seasons
+  PREVIEW: true                          // true = nothing is sent; set false to go live
+};
+const LIVE = !CONFIG.PREVIEW;
+/* ============================================================================== */
+
+const desserts = [
+  {id:"baklava", name:"Baklava", ar:"بقلاوة", desc:"Flaky layers of buttery phyllo, pistachio and walnut, soaked in orange blossom syrup.", art:"bak"},
+  {id:"knafeh", name:"Knafeh", ar:"كنافة", desc:"Warm sweet cheese under golden semolina, topped with pistachio and fragrant syrup.", art:"kn"},
+  {id:"maamoul", name:"Maamoul", ar:"معمول", desc:"Hand pressed semolina cookies filled with dates, walnuts or pistachio.", art:"ma"},
+  {id:"mouhalabieh", name:"Mouhalabieh", ar:"مهلبية", desc:"Silky milk pudding with rose water, finished with crushed pistachio.", art:"mo"},
+  {id:"namoura", name:"Namoura", ar:"نمورة", desc:"Moist semolina cake with coconut, an almond on every square, and light syrup.", art:"na"}
+];
+const art = {
+  bak:'<rect width="200" height="110" fill="#fbe3b8"/>'+[0,1,2,3,4].map(i=>[0,1].map(j=>`<g transform="translate(${30+i*36+(j?18:0)},${35+j*40})"><path d="M0 -20 L17 0 L0 20 L-17 0Z" fill="#e0a13e" stroke="#9a5a14"/><circle r="4" fill="#7f9f3c"/></g>`).join('')).join(''),
+  kn:'<rect width="200" height="110" fill="#fde9d6"/><ellipse cx="100" cy="62" rx="84" ry="36" fill="#c5561a"/><ellipse cx="100" cy="56" rx="80" ry="32" fill="#ee8a2c"/>'+[...Array(14)].map((_,i)=>`<circle cx="${40+i*9}" cy="${50+(i%3)*6}" r="3" fill="#7f9f3c"/>`).join(''),
+  ma:'<rect width="200" height="110" fill="#f6e7d0"/>'+[40,100,160].map(x=>`<circle cx="${x}" cy="56" r="26" fill="#f7dfb0" stroke="#d6b06c" stroke-width="3"/><path d="M${x-15} 50 Q${x} 36 ${x+15} 50 M${x-18} 60 Q${x} 46 ${x+18} 60 M${x-13} 70 Q${x} 60 ${x+13} 70" stroke="#c99f58" stroke-width="2.5" fill="none"/>`).join(''),
+  mo:'<rect width="200" height="110" fill="#f9e6ea"/>'+[60,140].map(x=>`<path d="M${x-36} 40 h72 l-8 50 h-56z" fill="#ffffff" stroke="#e6cfd5" stroke-width="2"/><ellipse cx="${x}" cy="40" rx="36" ry="9" fill="#fffaf5" stroke="#e6cfd5" stroke-width="2"/><circle cx="${x-8}" cy="39" r="3" fill="#7f9f3c"/><circle cx="${x+6}" cy="41" r="3" fill="#7f9f3c"/><circle cx="${x}" cy="37" r="2.5" fill="#c42a4a"/>`).join(''),
+  na:'<rect width="200" height="110" fill="#fdeccb"/>'+[0,1,2,3].map(i=>[0,1].map(j=>`<rect x="${18+i*42}" y="${14+j*42}" width="38" height="38" rx="3" fill="#e9b24c" stroke="#b97b1c"/><ellipse cx="${37+i*42}" cy="${33+j*42}" rx="6" ry="4" fill="#fff3dc"/>`).join('')).join(''),
+  cu:'<rect width="200" height="110" fill="#7d1d3a"/><rect x="40" y="26" width="120" height="70" rx="6" fill="#f4d8c8"/><path d="M40 46 h120" stroke="#e2a52b" stroke-width="6"/><path d="M100 26 v70" stroke="#e2a52b" stroke-width="6"/><path d="M84 26 q16 -22 16 0 q0 -22 16 0" stroke="#e2a52b" stroke-width="5" fill="none"/>'
+};
+const svg = k => `<svg viewBox="0 0 200 110" preserveAspectRatio="xMidYMid slice" aria-hidden="true">${art[k]}</svg>`;
+
+document.getElementById("menuGrid").innerHTML =
+  desserts.map(d=>`<button type="button" class="dish" data-id="${d.id}" aria-pressed="false">${svg(d.art)}<h3>${d.name}</h3><span class="ar" lang="ar">${d.ar}</span><p>${d.desc}</p><span class="add">Add to order</span></button>`).join('') +
+  `<button type="button" class="dish custom" data-id="custom" aria-pressed="false">${svg("cu")}<h3>Custom box</h3><p>Mix and match your favorites, or describe something special for your occasion.</p><span class="add">Build a custom box</span></button>`;
+
+const opts = [...desserts.map(d=>({id:d.id,name:d.name})),{id:"custom",name:"Custom box"}];
+document.getElementById("picks").innerHTML = opts.map(o=>`<label class="pick"><input type="checkbox" name="items" value="${o.name}" id="pick-${o.id}"><span>${o.name}</span></label>`).join('');
+
+const $ = id => document.getElementById(id);
+
+const pad = n => String(n).padStart(2,"0");
+const minD = new Date(); minD.setDate(minD.getDate()+CONFIG.LEAD_DAYS);
+const minStr = `${minD.getFullYear()}-${pad(minD.getMonth()+1)}-${pad(minD.getDate())}`;
+$("date").min = minStr;
+
+const sync = () => {
+  for(const o of opts){
+    const on = $("pick-"+o.id).checked, card = document.querySelector(`.dish[data-id="${o.id}"]`);
+    card.setAttribute("aria-pressed", on); card.querySelector(".add").textContent = on ? "Added \u2713" : (o.id==="custom" ? "Build a custom box" : "Add to order");
+  }
+  $("customWrap").hidden = !$("pick-custom").checked;
+  const n = document.querySelectorAll('input[name=items]:checked').length;
+  trayN = n; showTray();
+  $("trayCount").textContent = n === 1 ? "1 dessert picked" : `${n} desserts picked`;
+  if(n) $("pickErr").textContent = "";
+};
+let trayN = 0, orderInView = false;
+const showTray = () => { $("tray").hidden = trayN === 0 || orderInView || $("orderForm").hidden; };
+const io = new IntersectionObserver(es => { orderInView = es[0].isIntersecting; showTray(); }, {threshold:0.05});
+io.observe($("order"));
+document.querySelectorAll("input[name=items]").forEach(i => i.addEventListener("change", sync));
+document.querySelectorAll(".dish").forEach(c => c.addEventListener("click", () => { const i = $("pick-"+c.dataset.id); i.checked = !i.checked; sync(); }));
+
+const fmtDate = s => { const [y,m,d] = s.split("-").map(Number); return new Date(y,m-1,d).toLocaleDateString("en-US",{weekday:"long",month:"long",day:"numeric",year:"numeric"}); };
+const esc = s => String(s).replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+
+function validate(){
+  const errs = [];
+  const name = $("name").value.trim(), phone = $("phone").value.trim(), email = $("email").value.trim();
+  if(!name) errs.push("Please enter your name.");
+  if(phone.replace(/\D/g,"").length < 10) errs.push("Please enter a phone number with area code.");
+  if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) errs.push("Please enter a valid email.");
+  const items = [...document.querySelectorAll('input[name=items]:checked')].map(i=>i.value);
+  $("pickErr").textContent = items.length ? "" : "Pick at least one dessert or the custom box.";
+  if(!items.length) errs.push("Choose what you would like.");
+  if(items.includes("Custom box") && !$("custom").value.trim()) errs.push("Tell us what you would like in your custom box.");
+  const date = $("date").value;
+  if(!date) errs.push("Choose the date you need it by.");
+  else if(date < minStr) errs.push(`Please choose a date on or after ${fmtDate(minStr)}.`);
+  const g = Number($("guests").value);
+  if(!Number.isInteger(g) || g < 4) errs.push("Orders must serve at least 4 guests.");
+  return {errs, data:{name, phone, email, items, custom:$("custom").value.trim(), date, guests:g, notes:$("notes").value.trim()}};
+}
+
+function showDone(d, sent){
+  $("orderForm").hidden = true; showTray();
+  $("result").innerHTML = `<div class="done" role="status"><h3>Thank you, ${esc(d.name.split(" ")[0])}!</h3>
+    <p>${sent ? "Your order request is on its way to Sara. She will reach out soon to confirm details, pricing and your pickup time." : "Preview mode: this is what Sara would receive. Nothing was sent yet."}</p>
+    <dl><dt>Contact</dt><dd>${esc(d.name)}, ${esc(d.phone)}, ${esc(d.email)}</dd>
+    <dt>Order</dt><dd>${esc(d.items.join(", "))}${d.custom ? `<br>Custom box: ${esc(d.custom)}` : ""}</dd>
+    <dt>Pickup date</dt><dd>${esc(fmtDate(d.date))}</dd>
+    <dt>Guests</dt><dd>${esc(d.guests)}</dd>
+    ${d.notes ? `<dt>Notes</dt><dd>${esc(d.notes)}</dd>` : ""}</dl>
+    <p><button class="btn" type="button" id="again">Place another order</button></p></div>`;
+  $("again").addEventListener("click", () => { $("orderForm").reset(); sync(); $("orderForm").hidden = false; $("result").innerHTML = ""; $("order").scrollIntoView(); });
+  $("order").scrollIntoView();
+}
+
+$("orderForm").addEventListener("submit", async e => {
+  e.preventDefault();
+  const {errs, data} = validate();
+  $("formErr").innerHTML = errs.map(esc).join("<br>");
+  if(errs.length) return;
+  if(!LIVE){ showDone(data, false); return; }
+  const btn = $("submitBtn"); btn.disabled = true; btn.textContent = "Sending...";
+  const smsText = `New order: ${data.name}, ${data.phone}. ${data.items.join(", ")}. For ${data.guests} guests by ${data.date}.`;
+  try{
+    const res = await fetch(`https://formsubmit.co/ajax/${CONFIG.ORDER_EMAIL}`, {
+      method:"POST", headers:{"Content-Type":"application/json","Accept":"application/json"},
+      body: JSON.stringify({
+        _subject:`New dessert order: ${data.name}, ${data.guests} guests, pickup ${data.date}`,
+        ...(CONFIG.SMS_EMAIL ? {_cc: CONFIG.SMS_EMAIL} : {}), _template:"table", _captcha:"false", _replyto: data.email,
+        "Text summary": smsText,
+        "Name": data.name, "Phone": data.phone, "Email": data.email,
+        "Desserts": data.items.join(", "), "Custom box": data.custom || "None",
+        "Pickup date": fmtDate(data.date), "Guests": data.guests, "Notes": data.notes || "None"
+      })
+    });
+    if(!res.ok) throw new Error("bad status");
+    showDone(data, true);
+  }catch(err){
+    $("formErr").textContent = "Sorry, the order did not go through. Please check your connection and try again.";
+  }finally{ btn.disabled = false; btn.textContent = "Send my order"; }
+});
+}
+</script>
+</body>
+</html>
