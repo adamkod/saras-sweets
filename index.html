@@ -291,7 +291,8 @@ $("orderForm").addEventListener("submit", async e => {
         "Pickup date": fmtDate(data.date), "Guests": data.guests, "Notes": data.notes || "None"
       })
     });
-    if(!res.ok) throw new Error("bad status");
+    const out = await res.json().catch(() => ({}));
+    if(!res.ok || String(out.success) !== "true") throw new Error(out.message || "not sent");
     showDone(data, true);
   }catch(err){
     $("formErr").textContent = "Sorry, the order did not go through. Please check your connection and try again.";
